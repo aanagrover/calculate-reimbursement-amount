@@ -1,0 +1,14 @@
+{
+  "name": "calculate-reimbursement-amount",
+  "version": "1.0.0",
+  "description": "Exercise to calculate reimbursement amount",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.29.4"
+  }
+}
