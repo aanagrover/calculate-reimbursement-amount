@@ -12,31 +12,51 @@ function calculateReimbursement(projects) {
     let totalReimbursementAmount = 0;
     let currentDate, lccurrentDate = null;
 
-    for (const project of projects) {
-    const lcStartDate = moment(project["LC Start Date"], "MM/DD/YY");
-    const lcEndDate = moment(project["LC End Date"], "MM/DD/YY");
-    const StartDate = moment(project["Start Date"], "MM/DD/YY");
-    const EndDate = moment(project["End Date"], "MM/DD/YY");
+    // check if two projects are on the same day.
+    if(projects && projects.length > 1){
+        projects.forEach((el, i) => {
+            projects.slice(i + 1).forEach((e, j) => {
+                if(JSON.stringify(el) == JSON.stringify(e)){
+                    projects.splice(j, 1);
+                    // console.log(projects)
+                    return projects;
+                } else {
+                    return projects;
+                }
+            })
+        });
+    }
 
-        if (StartDate._i) { // Checking the high/low cost city dates
+    for (const project of projects) {
+    const lcStartDate = moment(project["LC Start Date"], "MM/DD/YY").date();
+    const lcEndDate = moment(project["LC End Date"], "MM/DD/YY").date();
+    const StartDate = moment(project["Start Date"], "MM/DD/YY").date();
+    const EndDate = moment(project["End Date"], "MM/DD/YY").date();
+
+         // Checking the high/low cost city dates
+        if (StartDate) {
             currentDate = StartDate;
-            while(currentDate.isSameOrBefore(EndDate)) {
-                if(currentDate.isBefore(EndDate)) {
+            while(currentDate <= EndDate) {
+                if(currentDate< EndDate && currentDate > StartDate) {
                     totalReimbursementAmount += highCostFullDayRate;
                 } else {
                     totalReimbursementAmount += highCostTravelRate;
                 }
-                currentDate.add(1, 'days');
+                currentDate++;
             }
-        } else if(lcStartDate._i){
-            lccurrentDate = lcStartDate;
-            while(lccurrentDate.isSameOrBefore(lcEndDate)) {
-                if(lccurrentDate.isBefore(lcEndDate)) {
+        } else if(lcStartDate){
+            if(lccurrentDate == lcStartDate) {
+
+            } else {
+                lccurrentDate = lcStartDate;
+            }
+            while(lccurrentDate <= lcEndDate) {
+                if(lccurrentDate < lcEndDate && lccurrentDate > lcStartDate) {
                     totalReimbursementAmount += lowCostFullDayRate;
                 } else {
                     totalReimbursementAmount += lowCostTravelRate;
                 }
-                lccurrentDate.add(1, 'days');
+                lccurrentDate++;
             }
         }
     }
@@ -50,9 +70,9 @@ const project1 = [
 ];
 
 const project2 = [
-    { "LC Start Date": "9/1/15", "LC End Date": "9/1/15" },
-    { "Start Date": "9/2/15", "End Date": "9/6/15" },
-    { "LC Start Date": "9/6/15", "LC End Date": "9/8/15" },
+    { "LC Start Date": "9/1/15", "LC End Date": "9/1/15" }, // assuming its a travel day
+    { "Start Date": "9/2/15", "End Date": "9/6/15" }, // assuming end day as travel day for high cost
+    { "LC Start Date": "9/6/15", "LC End Date": "9/8/15" }, // assuming start date as travel day for low cost
 ];
 
 const project3 = [
@@ -63,13 +83,13 @@ const project3 = [
 
 const project4 = [
     { "LC Start Date": "9/1/15", "LC End Date": "9/1/15" },
-    { "LC Start Date": "9/1/15", "LC End Date": "9/1/15" },
+    { "LC Start Date": "9/1/15", "LC End Date": "9/1/15" }, // counting one day as both the days are same 
     { "Start Date": "9/2/15", "End Date": "9/2/15" },
     { "Start Date": "9/2/15", "End Date": "9/3/15" },
 ];
 
 // Output of the reimbursement for each set
-console.log("Set 1 Reimbursement:", calculateReimbursement(project1));
-console.log("Set 2 Reimbursement:", calculateReimbursement(project2));
-console.log("Set 3 Reimbursement:", calculateReimbursement(project3));
-console.log("Set 4 Reimbursement:", calculateReimbursement(project4));
+console.log("Project 1 Reimbursement:", calculateReimbursement(project1));
+console.log("Project 2 Reimbursement:", calculateReimbursement(project2));
+console.log("Project 3 Reimbursement:", calculateReimbursement(project3));
+console.log("Project 4 Reimbursement:", calculateReimbursement(project4));
