@@ -28,10 +28,11 @@ function calculateReimbursement(projects) {
     }
 
     for (const project of projects) {
-    const lcStartDate = moment(project["LC Start Date"], "MM/DD/YY").date();
-    const lcEndDate = moment(project["LC End Date"], "MM/DD/YY").date();
-    const StartDate = moment(project["Start Date"], "MM/DD/YY").date();
-    const EndDate = moment(project["End Date"], "MM/DD/YY").date();
+        // assuming dates are correct
+        const lcStartDate = moment(project["LC Start Date"], "MM/DD/YY").date();
+        const lcEndDate = moment(project["LC End Date"], "MM/DD/YY").date();
+        const StartDate = moment(project["Start Date"], "MM/DD/YY").date();
+        const EndDate = moment(project["End Date"], "MM/DD/YY").date();
 
          // Checking the high/low cost city dates
         if (StartDate) {
